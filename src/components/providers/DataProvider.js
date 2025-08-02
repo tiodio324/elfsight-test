@@ -41,16 +41,29 @@ export function DataProvider({ children }) {
     fetchData(apiURL);
   }, [apiURL, fetchData]);
 
-  const updateApiURL = useCallback((newUrl, filters = {}) => {
+  const updateApiURL = useCallback((newUrl, filters = {}, resetPage = true) => {
     setApiURL(newUrl);
     setCurrentFilters(filters);
-    setActivePage(1);
+    if (resetPage) {
+      setActivePage(1);
+    }
   }, []);
+
+  const updatePage = useCallback(
+    (pageNumber) => {
+      setActivePage(pageNumber);
+
+      const newUrl = new URL(apiURL);
+      newUrl.searchParams.set('page', pageNumber);
+      setApiURL(newUrl.toString(), currentFilters, false);
+    },
+    [apiURL, currentFilters]
+  );
 
   const dataValue = useMemo(
     () => ({
       activePage,
-      setActivePage,
+      setActivePage: updatePage,
       apiURL,
       setApiURL: updateApiURL,
       characters,
@@ -69,6 +82,7 @@ export function DataProvider({ children }) {
       info,
       fetchData,
       updateApiURL,
+      updatePage,
       currentFilters
     ]
   );

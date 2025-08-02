@@ -63,12 +63,12 @@ export function Filter() {
 
   const applyFilters = () => {
     const newApiUrl = buildApiUrl(filters);
-    setApiURL(newApiUrl, filters);
+    setApiURL(newApiUrl, filters, true); // resetPage = true
   };
 
   const resetFilters = () => {
     setFilters({ status: '', species: '', gender: '', name: '', type: '' });
-    setApiURL('https://rickandmortyapi.com/api/character/', {});
+    setApiURL('https://rickandmortyapi.com/api/character/', {}, true); // resetPage = true
   };
 
   return (
